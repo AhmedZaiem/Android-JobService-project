@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.projet.ui.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_customer_navigation"
+            app:destination="@id/customer_navigation" />
+        <action
+            android:id="@+id/action_loginFragment_to_provider_navigation"
+            app:destination="@id/provider_navigation" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.projet.ui.auth.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <navigation android:id="@+id/customer_navigation" app:startDestination="@id/homeFragment">
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.example.projet.ui.customer.HomeFragment"
+            android:label="fragment_home"
+            tools:layout="@layout/fragment_home" >
+            <action
+                android:id="@+id/action_homeFragment_to_customerReservationsFragment"
+                app:destination="@id/customerReservationsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/customerReservationsFragment"
+            android:name="com.example.projet.ui.customer.ReservationsFragment"
+            android:label="fragment_customer_reservations"
+            tools:layout="@layout/fragment_customer_reservations" />
+    </navigation>
+
+    <navigation android:id="@+id/provider_navigation" app:startDestination="@id/homeFragmentProvider">
+        <fragment
+            android:id="@+id/homeFragmentProvider"
+            android:name="com.example.projet.ui.provider.HomeFragmentProvider"
+            android:label="fragment_home_provider"
+            tools:layout="@layout/fragment_home_provider" >
+            <action
+                android:id="@+id/action_homeFragmentProvider_to_manageServicesFragment"
+                app:destination="@id/manageServicesFragment" />
+            <action
+                android:id="@+id/action_homeFragmentProvider_to_providerReservationsFragment"
+                app:destination="@id/providerReservationsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/manageServicesFragment"
+            android:name="com.example.projet.ui.provider.ManageServicesFragment"
+            android:label="fragment_manage_services"
+            tools:layout="@layout/fragment_manage_services" />
+        <fragment
+            android:id="@+id/providerReservationsFragment"
+            android:name="com.example.projet.ui.provider.ReservationsFragment"
+            android:label="fragment_provider_reservations"
+            tools:layout="@layout/fragment_provider_reservations" />
+    </navigation>
+
+</navigation>
