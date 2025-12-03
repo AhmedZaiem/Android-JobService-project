@@ -1,5 +1,6 @@
 package com.example.projet.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,37 +15,62 @@ class AuthViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    // ---------------------------
+    // Loading state
+    // ---------------------------
+    private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _loginSuccess = MutableLiveData<Boolean>()
+    // ---------------------------
+    // Login state
+    // ---------------------------
+    private val _loginSuccess = MutableLiveData(false)
     val loginSuccess: LiveData<Boolean> = _loginSuccess
-
-    private val _userRole = MutableLiveData<String?>()
-    val userRole: LiveData<String?> = _userRole
-
-    private val _registerResult = MutableLiveData<Result<String>>()
-    val registerResult: LiveData<Result<String>> = _registerResult
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    // ---------------------------
+    // Logged-in user info
+    // ---------------------------
+    private val _userRole = MutableLiveData<String?>()
+    val userRole: LiveData<String?> = _userRole
+
+    private val _userId = MutableLiveData<String?>()
+    val userId: LiveData<String?> = _userId
+
+    // ---------------------------
+    // Registration result
+    // ---------------------------
+    private val _registerResult = MutableLiveData<Result<String>>()
+    val registerResult: LiveData<Result<String>> = _registerResult
+
+    // ---------------------------
+    // Categories
+    // ---------------------------
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
 
+
+    // ==============================
+    // LOAD CATEGORIES
+    // ==============================
     fun getCategories() {
         viewModelScope.launch {
             try {
-                val result = repository.getCategories()
-                _categories.value = result
+                _categories.value = repository.getCategories()
             } catch (e: Exception) {
-                // Handle error silently or log it
+                Log.e("AuthViewModel", "Failed to load categories", e)
             }
         }
     }
 
-    fun login(email: String, pass: String) {
-        if (email.isBlank() || pass.isBlank()) {
+
+    // ==============================
+    // LOGIN
+    // ==============================
+    fun login(email: String, password: String) {
+        if (email.isBlank() || password.isBlank()) {
             _errorMessage.value = "Please enter email and password"
             return
         }
@@ -54,13 +80,19 @@ class AuthViewModel(
             _errorMessage.value = null
 
             try {
-                val loginRequest = LoginRequest(email, pass)
-                val response = repository.login(loginRequest)
-                
+                val request = LoginRequest(email, password)
+                val response = repository.login(request)
+
+                // Store info
                 _userRole.value = response.role
+                _userId.value = response._id
+
+                Log.d("AuthViewModel", "User logged in with id=${response._id}, role=${response.role}")
+
                 _loginSuccess.value = true
 
             } catch (e: Exception) {
+                Log.e("AuthViewModel", "Login failed", e)
                 _errorMessage.value = "Login failed: ${e.message}"
                 _loginSuccess.value = false
             } finally {
@@ -68,9 +100,23 @@ class AuthViewModel(
             }
         }
     }
-    
-    fun register(name: String, email: String, pass: String, role: String, city: String?, tel: String?, category: String?, skills: String?, bio: String?) {
-        if (name.isBlank() || email.isBlank() || pass.isBlank()) {
+
+
+    // ==============================
+    // REGISTER
+    // ==============================
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+        role: String,
+        city: String?,
+        tel: String?,
+        category: String?,
+        skills: String?,
+        bio: String?
+    ) {
+        if (name.isBlank() || email.isBlank() || password.isBlank()) {
             _registerResult.value = Result.failure(Exception("Please fill required fields"))
             return
         }
@@ -78,10 +124,14 @@ class AuthViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val request = RegisterRequest(name, email, pass, role, city, tel, category, skills, bio)
+                val request = RegisterRequest(
+                    name, email, password, role, city, tel, category, skills, bio
+                )
                 val response = repository.register(request)
                 _registerResult.value = Result.success(response.message)
+
             } catch (e: Exception) {
+                Log.e("AuthViewModel", "Registration failed", e)
                 _registerResult.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
@@ -89,8 +139,19 @@ class AuthViewModel(
         }
     }
 
+
+    // ==============================
+    // HELPERS
+    // ==============================
     fun onNavigationComplete() {
+        // Reset navigation flag only
         _loginSuccess.value = false
+    }
+
+    fun logout() {
         _userRole.value = null
+        _userId.value = null
+        _loginSuccess.value = false
+        _errorMessage.value = null
     }
 }

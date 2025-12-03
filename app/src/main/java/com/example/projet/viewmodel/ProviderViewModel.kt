@@ -1,5 +1,6 @@
 package com.example.projet.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,15 +40,18 @@ class ProviderViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                Log.d("ProviderViewModel", "Fetching services for $providerId")
                 val result = repository.getProviderServices(providerId)
+                Log.d("ProviderViewModel", "Services fetched: $result")
                 _services.value = result
             } catch (e: Exception) {
-                // Handle error
+                Log.e("ProviderViewModel", "Error loading services", e)
             } finally {
                 _isLoading.value = false
             }
         }
     }
+
 
     fun getCategories() {
         viewModelScope.launch {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projet.R
 import com.example.projet.data.repository.AuthRepository
@@ -18,8 +18,8 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    // Manual dependency injection factory
-    private val viewModel: AuthViewModel by viewModels {
+    // Use activityViewModels to share the ViewModel with other fragments
+    private val viewModel: AuthViewModel by activityViewModels {
         object : androidx.lifecycle.ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return AuthViewModel(AuthRepository()) as T

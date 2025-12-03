@@ -1,26 +1,24 @@
 package com.example.projet.ui.provider
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.projet.data.model.Category
-import com.example.projet.data.model.Service
+import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.ProviderRepository
 import com.example.projet.databinding.FragmentManageServicesBinding
-import com.example.projet.databinding.ItemProviderServiceBinding
+import com.example.projet.viewmodel.AuthViewModel
 import com.example.projet.viewmodel.ProviderViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-
-
 
 class ManageServicesFragment : Fragment() {
 
@@ -34,9 +32,14 @@ class ManageServicesFragment : Fragment() {
             }
         }
     }
-    
-    // Placeholder provider ID - in a real app, get this from SharedPrefs or Session
-    private val providerId = "USER_ID_FROM_SESSION" 
+
+    private val authViewModel: AuthViewModel by activityViewModels {
+        object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return AuthViewModel(AuthRepository()) as T
+            }
+        }
+    }
 
     private lateinit var servicesAdapter: ServicesAdapter
 
@@ -55,13 +58,20 @@ class ManageServicesFragment : Fragment() {
         setupObservers()
         setupListeners()
 
-        viewModel.loadProviderServices(providerId)
+        authViewModel.userId.observe(viewLifecycleOwner) { providerId ->
+            if (providerId != null) {
+                viewModel.loadProviderServices(providerId)
+            }
+        }
         viewModel.getCategories()
     }
 
     private fun setupRecyclerView() {
         servicesAdapter = ServicesAdapter { serviceId ->
-            viewModel.deleteService(serviceId, providerId)
+            val providerId = authViewModel.userId.value
+            if (providerId != null) {
+                viewModel.deleteService(serviceId, providerId)
+            }
         }
         binding.rvServices.apply {
             layoutManager = LinearLayoutManager(context)
@@ -75,10 +85,11 @@ class ManageServicesFragment : Fragment() {
         }
 
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
+            val categoryNames = categories.map { it.name }
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                categories
+                categoryNames
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.categorySpinner.adapter = adapter
@@ -91,14 +102,14 @@ class ManageServicesFragment : Fragment() {
                 binding.etTitle.text.clear()
                 binding.etDescription.text.clear()
                 binding.etPrice.text.clear()
-                if (binding.categorySpinner.adapter != null && binding.categorySpinner.adapter.count > 0) {
+                if (binding.categorySpinner.adapter.count > 0) {
                     binding.categorySpinner.setSelection(0)
                 }
             }.onFailure { e ->
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.btnAddService.isEnabled = !isLoading
         }
@@ -109,21 +120,20 @@ class ManageServicesFragment : Fragment() {
             val title = binding.etTitle.text.toString()
             val desc = binding.etDescription.text.toString()
             val price = binding.etPrice.text.toString()
-            
-            val selectedCategory = binding.categorySpinner.selectedItem as? Category
-            val categoryId = selectedCategory?.id
+            val selectedCategoryPosition = binding.categorySpinner.selectedItemPosition
+            val categoryId = viewModel.categories.value?.getOrNull(selectedCategoryPosition)?.id
+            val providerId = authViewModel.userId.value
 
-            if (title.isNotEmpty() && desc.isNotEmpty() && price.isNotEmpty() && categoryId != null) {
-                
+            if (title.isNotEmpty() && desc.isNotEmpty() && price.isNotEmpty() && categoryId != null && providerId != null) {
                 val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
                 val descBody = desc.toRequestBody("text/plain".toMediaTypeOrNull())
                 val priceBody = price.toRequestBody("text/plain".toMediaTypeOrNull())
                 val catBody = categoryId.toRequestBody("text/plain".toMediaTypeOrNull())
                 val providerBody = providerId.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                // Photo is null for now as we haven't implemented picker
                 viewModel.createService(titleBody, descBody, priceBody, providerBody, catBody, null)
             } else {
+                Log.d("ManageServicesFragment", "Validation failed: title=$title, desc=$desc, price=$price, categoryId=$categoryId, providerId=$providerId")
                 Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
         }
@@ -132,39 +142,5 @@ class ManageServicesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-}
-
-class ServicesAdapter(private val onDeleteClick: (String) -> Unit) : RecyclerView.Adapter<ServicesAdapter.ServiceViewHolder>() {
-
-    private var services = listOf<Service>()
-
-    fun submitList(newServices: List<Service>) {
-        services = newServices
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceViewHolder {
-        val binding = ItemProviderServiceBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return ServiceViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
-        holder.bind(services[position])
-    }
-
-    override fun getItemCount() = services.size
-
-    inner class ServiceViewHolder(private val binding: ItemProviderServiceBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(service: Service) {
-            binding.tvServiceTitle.text = service.title
-            binding.tvServicePrice.text = "Price: $${service.price}"
-            
-            binding.btnDeleteService.setOnClickListener {
-                onDeleteClick(service.id)
-            }
-        }
     }
 }

@@ -1,17 +1,21 @@
 package com.example.projet.ui.provider
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projet.R
+import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.ProviderRepository
 import com.example.projet.databinding.FragmentHomeProviderBinding
+import com.example.projet.viewmodel.AuthViewModel
 import com.example.projet.viewmodel.ProviderViewModel
 
 class HomeFragmentProvider : Fragment() {
@@ -27,8 +31,13 @@ class HomeFragmentProvider : Fragment() {
         }
     }
 
-    // Placeholder provider ID - in a real app, get this from SharedPrefs or Session
-    private val providerId = "USER_ID_FROM_SESSION" 
+    private val authViewModel: AuthViewModel by activityViewModels {
+        object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return AuthViewModel(AuthRepository()) as T
+            }
+        }
+    }
 
     private lateinit var servicesAdapter: ServicesAdapter
 
@@ -48,15 +57,14 @@ class HomeFragmentProvider : Fragment() {
         setupClickListeners()
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Load services when view becomes active
-        viewModel.loadProviderServices(providerId)
-    }
-
     private fun setupRecyclerView() {
         servicesAdapter = ServicesAdapter { serviceId ->
-            viewModel.deleteService(serviceId, providerId)
+            val providerId = authViewModel.userId.value
+            if (providerId != null) {
+                viewModel.deleteService(serviceId, providerId)
+            } else {
+                Toast.makeText(context, "User ID not found", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.rvProviderServices.apply {
             layoutManager = LinearLayoutManager(context)
@@ -65,14 +73,32 @@ class HomeFragmentProvider : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.services.observe(viewLifecycleOwner) { services ->
-            servicesAdapter.submitList(services)
+        authViewModel.userId.observe(viewLifecycleOwner) { providerId ->
+            if (!providerId.isNullOrEmpty()) {
+                Log.d("HomeFragmentProvider", "UserId observed: $providerId")
+                viewModel.loadProviderServices(providerId)
+            } else {
+                Log.w("HomeFragmentProvider", "Provider ID is null, clearing services.")
+                servicesAdapter.submitList(emptyList())
+            }
         }
-        
+
+        viewModel.services.observe(viewLifecycleOwner) { services ->
+            Log.d("HomeFragmentProvider", "Services updated: ${services.size} items")
+            servicesAdapter.submitList(services)
+            binding.tvEmptyServices.visibility = if (services.isEmpty()) View.VISIBLE else View.GONE
+            binding.rvProviderServices.visibility = if (services.isEmpty()) View.GONE else View.VISIBLE
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         viewModel.operationStatus.observe(viewLifecycleOwner) { result ->
             result.onSuccess { message ->
-                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }.onFailure { e ->
+                Log.e("HomeFragmentProvider", "Operation failed", e)
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
@@ -88,7 +114,7 @@ class HomeFragmentProvider : Fragment() {
         }
 
         binding.btnViewReviews.setOnClickListener {
-             Toast.makeText(context, "Reviews Feature Coming Soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Reviews Feature Coming Soon", Toast.LENGTH_SHORT).show()
         }
     }
 
