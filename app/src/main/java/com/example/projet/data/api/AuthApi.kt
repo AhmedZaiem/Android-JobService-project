@@ -1,10 +1,12 @@
 package com.example.projet.data.api
 
+import com.example.projet.data.model.Category
 import com.example.projet.data.model.LoginRequest
 import com.example.projet.data.model.LoginResponse
 import com.example.projet.data.model.MessageResponse
 import com.example.projet.data.model.RegisterRequest
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -13,4 +15,7 @@ interface AuthApi {
 
     @POST("auth/register")
     suspend fun register(@Body registerRequest: RegisterRequest): MessageResponse
+
+    @GET("admin/categories")
+    suspend fun getCategories(): List<Category>
 }

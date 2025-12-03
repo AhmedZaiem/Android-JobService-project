@@ -34,9 +34,9 @@
     <navigation android:id="@+id/customer_navigation" app:startDestination="@id/homeFragment">
         <fragment
             android:id="@+id/homeFragment"
-            android:name="com.example.projet.ui.customer.HomeFragment"
+            android:name="com.example.projet.ui.customer.HomeFragmentCustomer"
             android:label="fragment_home"
-            tools:layout="@layout/fragment_home" >
+            tools:layout="@layout/fragment_customer_home" >
             <action
                 android:id="@+id/action_homeFragment_to_customerReservationsFragment"
                 app:destination="@id/customerReservationsFragment" />

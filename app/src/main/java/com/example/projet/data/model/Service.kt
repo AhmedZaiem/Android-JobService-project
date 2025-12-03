@@ -1,10 +1,13 @@
 package com.example.projet.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Service(
-    val _id: String,
+    @SerializedName("_id") val id: String,
     val title: String,
     val description: String,
     val price: Double,
-    val photoURL: String
+    val photoURL: String?,
+    val providerId: String,
+    val categoryId: String
 )
-

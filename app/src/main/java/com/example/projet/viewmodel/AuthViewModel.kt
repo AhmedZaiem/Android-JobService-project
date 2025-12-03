@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projet.data.model.Category
 import com.example.projet.data.model.LoginRequest
 import com.example.projet.data.model.RegisterRequest
 import com.example.projet.data.repository.AuthRepository
@@ -27,6 +28,20 @@ class AuthViewModel(
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
+
+    private val _categories = MutableLiveData<List<Category>>()
+    val categories: LiveData<List<Category>> = _categories
+
+    fun getCategories() {
+        viewModelScope.launch {
+            try {
+                val result = repository.getCategories()
+                _categories.value = result
+            } catch (e: Exception) {
+                // Handle error silently or log it
+            }
+        }
+    }
 
     fun login(email: String, pass: String) {
         if (email.isBlank() || pass.isBlank()) {
@@ -54,16 +69,16 @@ class AuthViewModel(
         }
     }
     
-    fun register(name: String, email: String, pass: String, role: String) {
+    fun register(name: String, email: String, pass: String, role: String, city: String?, tel: String?, category: String?, skills: String?, bio: String?) {
         if (name.isBlank() || email.isBlank() || pass.isBlank()) {
-            _registerResult.value = Result.failure(Exception("Please fill all fields"))
+            _registerResult.value = Result.failure(Exception("Please fill required fields"))
             return
         }
 
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val request = RegisterRequest(name, email, pass, role)
+                val request = RegisterRequest(name, email, pass, role, city, tel, category, skills, bio)
                 val response = repository.register(request)
                 _registerResult.value = Result.success(response.message)
             } catch (e: Exception) {

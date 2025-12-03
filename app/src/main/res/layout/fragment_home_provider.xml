@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.provider.HomeFragmentProvider">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Provider Home" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Provider Dashboard"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/btnManageServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Services"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnViewBookings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Bookings"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnViewReviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Reviews"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Services"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProviderServices"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

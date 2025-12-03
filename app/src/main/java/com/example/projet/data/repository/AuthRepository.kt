@@ -12,4 +12,6 @@ class AuthRepository {
     suspend fun login(loginRequest: LoginRequest) = authApi.login(loginRequest)
 
     suspend fun register(registerRequest: RegisterRequest) = authApi.register(registerRequest)
+
+    suspend fun getCategories() = authApi.getCategories()
 }
