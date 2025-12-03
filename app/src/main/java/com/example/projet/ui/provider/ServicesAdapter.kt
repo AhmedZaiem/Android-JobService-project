@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projet.data.model.Service
 import com.example.projet.databinding.ItemProviderServiceBinding
 
-class ServicesAdapter(private val onDeleteClick: (String) -> Unit) :
-    ListAdapter<Service, ServicesAdapter.ServiceViewHolder>(ServiceDiffCallback()) {
+class ServicesAdapter(
+    private val onDeleteClick: (String) -> Unit,
+    private val onEditClick: (Service) -> Unit
+) : ListAdapter<Service, ServicesAdapter.ServiceViewHolder>(ServiceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceViewHolder {
         val binding =
@@ -28,8 +30,13 @@ class ServicesAdapter(private val onDeleteClick: (String) -> Unit) :
             binding.tvServiceName.text = service.title
             binding.tvServiceDescription.text = service.description
             binding.tvServicePrice.text = "Price: ${service.price}"
+            
             binding.btnDeleteService.setOnClickListener {
                 onDeleteClick(service.id)
+            }
+            
+            binding.btnEditService.setOnClickListener {
+                onEditClick(service)
             }
         }
     }

@@ -1,10 +1,14 @@
 package com.example.projet.ui.provider
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,11 +16,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projet.R
+import com.example.projet.data.model.Service
 import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.ProviderRepository
 import com.example.projet.databinding.FragmentHomeProviderBinding
 import com.example.projet.viewmodel.AuthViewModel
 import com.example.projet.viewmodel.ProviderViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class HomeFragmentProvider : Fragment() {
 
@@ -58,18 +65,92 @@ class HomeFragmentProvider : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        servicesAdapter = ServicesAdapter { serviceId ->
-            val providerId = authViewModel.userId.value
-            if (providerId != null) {
-                viewModel.deleteService(serviceId, providerId)
-            } else {
-                Toast.makeText(context, "User ID not found", Toast.LENGTH_SHORT).show()
+        servicesAdapter = ServicesAdapter(
+            onDeleteClick = { serviceId ->
+                showDeleteConfirmationDialog(serviceId)
+            },
+            onEditClick = { service ->
+                showEditDialog(service)
             }
-        }
+        )
         binding.rvProviderServices.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = servicesAdapter
         }
+    }
+
+    private fun showDeleteConfirmationDialog(serviceId: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Service")
+            .setMessage("Are you sure you want to delete this service?")
+            .setPositiveButton("Yes") { _, _ ->
+                val providerId = authViewModel.userId.value
+                if (providerId != null) {
+                    viewModel.deleteService(serviceId, providerId)
+                } else {
+                    Toast.makeText(context, "User ID not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun showEditDialog(service: Service) {
+        val context = requireContext()
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 40, 50, 10)
+        }
+
+        val titleInput = EditText(context).apply {
+            hint = "Title"
+            setText(service.title)
+        }
+        val descInput = EditText(context).apply {
+            hint = "Description"
+            setText(service.description)
+        }
+        val priceInput = EditText(context).apply {
+            hint = "Price"
+            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            setText(service.price.toString())
+        }
+
+        layout.addView(titleInput)
+        layout.addView(descInput)
+        layout.addView(priceInput)
+
+        AlertDialog.Builder(context)
+            .setTitle("Update Service")
+            .setView(layout)
+            .setPositiveButton("Update") { _, _ ->
+                val newTitle = titleInput.text.toString()
+                val newDesc = descInput.text.toString()
+                val newPrice = priceInput.text.toString()
+                val providerId = authViewModel.userId.value
+
+                if (newTitle.isNotEmpty() && newDesc.isNotEmpty() && newPrice.isNotEmpty() && providerId != null) {
+                    val titleBody = newTitle.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val descBody = newDesc.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val priceBody = newPrice.toRequestBody("text/plain".toMediaTypeOrNull())
+                    // We reuse the existing category ID for now as the dialog doesn't have a spinner
+                    val catBody = service.categoryId.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                    viewModel.updateService(
+                        serviceId = service.id,
+                        title = titleBody,
+                        desc = descBody,
+                        price = priceBody,
+                        categoryId = catBody,
+                        photo = null, // Photo update not supported in this dialog
+                        providerId = providerId
+                    )
+                } else {
+                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun setupObservers() {
