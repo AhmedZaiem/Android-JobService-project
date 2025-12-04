@@ -60,6 +60,9 @@
             <action
                 android:id="@+id/action_homeFragmentProvider_to_BookingFragmentProvider"
                 app:destination="@id/providerReservationsFragment" />
+            <action
+                android:id="@+id/action_homeFragmentProvider_to_reviewFragmentProvider"
+                app:destination="@id/reviewFragmentProvider" />
         </fragment>
         <fragment
             android:id="@+id/manageServicesFragment"
@@ -71,6 +74,11 @@
             android:name="com.example.projet.ui.provider.BookingFragmentProvider"
             android:label="fragment_provider_reservations"
             tools:layout="@layout/fragment_provider_bookings" />
+        <fragment
+            android:id="@+id/reviewFragmentProvider"
+            android:name="com.example.projet.ui.provider.ReviewFragmentProvider"
+            android:label="fragment_review_provider"
+            tools:layout="@layout/fragment_review_provider" />
     </navigation>
 
 </navigation>

@@ -195,7 +195,7 @@ class HomeFragmentProvider : Fragment() {
         }
 
         binding.btnViewReviews.setOnClickListener {
-            Toast.makeText(context, "Reviews Feature Coming Soon", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_homeFragmentProvider_to_reviewFragmentProvider)
         }
     }
 

@@ -6,12 +6,12 @@ data class Booking(
     @SerializedName("_id") val id: String,
     val date: String?,
     val status: String?,
-    val customerId: Customer?,
+    val customerId: BookingCustomer?,
     val serviceId: BookingService?,
     val providerId: String?
 )
 
-data class Customer(
+data class BookingCustomer(
     @SerializedName("_id") val id: String,
     val name: String?
 )
