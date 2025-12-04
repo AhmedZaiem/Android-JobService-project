@@ -18,11 +18,8 @@ interface CustomerApi {
 
 
     // ------------ SERVICES ------------
-    @GET("services")
+    @GET("admin/services")
     suspend fun getAllServices(): List<Service>
-
-    @GET("services/{id}")
-    suspend fun getServiceDetails(@Path("id") id: String): Service
 
 
     // ------------ BOOKINGS ------------
@@ -50,8 +47,4 @@ interface CustomerApi {
         @Body review: ReviewRequest
     ): MessageResponse
 
-    @GET("services/reviews/{serviceId}")
-    suspend fun getServiceReviews(
-        @Path("serviceId") serviceId: String
-    ): List<Review>
 }

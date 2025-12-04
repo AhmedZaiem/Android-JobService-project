@@ -2,6 +2,8 @@ package com.example.projet.data.repository
 
 import com.example.projet.data.api.CustomerApi
 import com.example.projet.data.api.RetrofitClient
+import com.example.projet.data.model.BookServiceRequest
+import com.example.projet.data.model.ReviewRequest
 
 
 class CustomerRepository {
@@ -10,5 +12,12 @@ class CustomerRepository {
 
     suspend fun getAllServices() = api.getAllServices()
     suspend fun getCustomerBookings(id: String) = api.getCustomerBookings(id)
+    suspend fun bookService(serviceId: String, bookingData: BookServiceRequest) = api.bookService(serviceId, bookingData)
+    suspend fun cancelBooking(bookingId: String) = api.cancelBooking(bookingId)
+    suspend fun createReview(serviceId: String, review: ReviewRequest) = api.createReview(serviceId, review)
+
+
+
+
 
 }

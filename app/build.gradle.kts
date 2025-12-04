@@ -82,6 +82,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
+    // Coil
+    implementation("io.coil-kt:coil:2.6.0")
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

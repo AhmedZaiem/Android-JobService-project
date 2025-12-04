@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:id="@+id/imageViewService"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewService"
+            tools:text="House Cleaning Service" />
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="16dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+            tools:text="We provide professional house cleaning services with eco-friendly products." />
+
+        <TextView
+            android:id="@+id/textViewPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_green_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="$50.00" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
