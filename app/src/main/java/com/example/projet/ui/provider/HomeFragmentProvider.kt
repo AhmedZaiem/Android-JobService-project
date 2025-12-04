@@ -191,7 +191,7 @@ class HomeFragmentProvider : Fragment() {
         }
 
         binding.btnViewBookings.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragmentProvider_to_providerReservationsFragment)
+            findNavController().navigate(R.id.action_homeFragmentProvider_to_BookingFragmentProvider)
         }
 
         binding.btnViewReviews.setOnClickListener {

@@ -1,18 +1,23 @@
 package com.example.projet.data.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 data class Booking(
-    val _id: String,
-    val status: String,
-    val customerId: Customer,
-    val serviceId: Service
+    @SerializedName("_id") val id: String,
+    val date: String?,
+    val status: String?,
+    val customerId: Customer?,
+    val serviceId: BookingService?,
+    val providerId: String?
 )
 
 data class Customer(
-    val name: String,
-    val email: String,
-    val tel: String,
-    val city: String
+    @SerializedName("_id") val id: String,
+    val name: String?
+)
+
+// Renamed to avoid conflict with com.example.projet.data.model.Service
+data class BookingService(
+    @SerializedName("_id") val id: String,
+    val title: String?
 )

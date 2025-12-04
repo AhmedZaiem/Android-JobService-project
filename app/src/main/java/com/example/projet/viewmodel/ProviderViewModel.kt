@@ -127,15 +127,19 @@ class ProviderViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                Log.d("ProviderViewModel", "Loading bookings for provider: $providerId")
                 val result = repository.getBookingsByProvider(providerId)
+                Log.d("ProviderViewModel", "Bookings fetched successfully. Count: ${result.size}")
                 _bookings.value = result
             } catch (e: Exception) {
-                 // handle error
+                Log.e("ProviderViewModel", "Error loading bookings", e)
+                _operationStatus.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
             }
         }
     }
+
 
     fun acceptBooking(bookingId: String, providerId: String) {
         viewModelScope.launch {
@@ -160,6 +164,7 @@ class ProviderViewModel(
             }
         }
     }
+
 
     fun loadReviews(providerId: String) {
          viewModelScope.launch {

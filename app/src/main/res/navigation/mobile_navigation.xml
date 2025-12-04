@@ -58,7 +58,7 @@
                 android:id="@+id/action_homeFragmentProvider_to_manageServicesFragment"
                 app:destination="@id/manageServicesFragment" />
             <action
-                android:id="@+id/action_homeFragmentProvider_to_providerReservationsFragment"
+                android:id="@+id/action_homeFragmentProvider_to_BookingFragmentProvider"
                 app:destination="@id/providerReservationsFragment" />
         </fragment>
         <fragment
@@ -68,9 +68,9 @@
             tools:layout="@layout/fragment_manage_services" />
         <fragment
             android:id="@+id/providerReservationsFragment"
-            android:name="com.example.projet.ui.provider.ReservationsFragment"
+            android:name="com.example.projet.ui.provider.BookingFragmentProvider"
             android:label="fragment_provider_reservations"
-            tools:layout="@layout/fragment_provider_reservations" />
+            tools:layout="@layout/fragment_provider_bookings" />
     </navigation>
 
 </navigation>
