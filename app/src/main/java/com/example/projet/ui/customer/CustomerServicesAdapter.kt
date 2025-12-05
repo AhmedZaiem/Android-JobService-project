@@ -44,6 +44,7 @@ class CustomerServicesAdapter(
         fun bind(service: Service) {
             binding.textViewTitle.text = service.title
             binding.textViewDescription.text = service.description
+            binding.textViewProviderName.text = "Provider: ${service.providerId.name ?: "Unknown"}"
             
             val format = NumberFormat.getCurrencyInstance(Locale.US)
             binding.textViewPrice.text = format.format(service.price)

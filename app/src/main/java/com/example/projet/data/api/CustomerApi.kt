@@ -3,19 +3,12 @@ package com.example.projet.data.api
 
 import com.example.projet.data.model.BookServiceRequest
 import com.example.projet.data.model.Booking
-import com.example.projet.data.model.LoginRequest
-import com.example.projet.data.model.LoginResponse
 import com.example.projet.data.model.MessageResponse
-import com.example.projet.data.model.RegisterRequest
-import com.example.projet.data.model.Review
 import com.example.projet.data.model.ReviewRequest
 import com.example.projet.data.model.Service
-import com.example.projet.data.model.User
 import retrofit2.http.*
 
 interface CustomerApi {
-
-
 
     // ------------ SERVICES ------------
     @GET("admin/services")

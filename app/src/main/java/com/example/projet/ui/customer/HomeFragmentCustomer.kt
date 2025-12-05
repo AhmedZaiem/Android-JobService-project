@@ -54,6 +54,7 @@ class HomeFragmentCustomer : Fragment() {
     private fun setupRecyclerView() {
         adapter = CustomerServicesAdapter { service ->
             // Handle item click, e.g., navigate to details
+            // service is now of type Service
             Toast.makeText(context, "Clicked: ${service.title}", Toast.LENGTH_SHORT).show()
         }
         
@@ -65,6 +66,7 @@ class HomeFragmentCustomer : Fragment() {
 
     private fun observeViewModel() {
         viewModel.services.observe(viewLifecycleOwner) { services ->
+            // services is List<Service>
             adapter.submitList(services)
             
             if (services.isEmpty()) {

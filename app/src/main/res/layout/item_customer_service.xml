@@ -55,6 +55,18 @@
             tools:text="We provide professional house cleaning services with eco-friendly products." />
 
         <TextView
+            android:id="@+id/textViewProviderName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+            tools:text="Provider: John Doe" />
+
+        <TextView
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +76,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/holo_green_dark"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+            app:layout_constraintTop_toBottomOf="@+id/textViewProviderName"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="$50.00" />
 
