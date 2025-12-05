@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projet.data.model.Booking
 import com.example.projet.data.model.Category
+import com.example.projet.data.model.ProviderStats
 import com.example.projet.data.model.Review
 import com.example.projet.data.model.Service
 import com.example.projet.data.repository.ProviderRepository
@@ -30,6 +31,9 @@ class ProviderViewModel(
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
 
+    private val _stats = MutableLiveData<ProviderStats>()
+    val stats: LiveData<ProviderStats> = _stats
+
     private val _operationStatus = MutableLiveData<Result<String>>()
     val operationStatus: LiveData<Result<String>> = _operationStatus
 
@@ -44,6 +48,7 @@ class ProviderViewModel(
                 val result = repository.getProviderServices(providerId)
                 Log.d("ProviderViewModel", "Services fetched: $result")
                 _services.value = result
+                updateStats()
             } catch (e: Exception) {
                 Log.e("ProviderViewModel", "Error loading services", e)
             } finally {
@@ -51,7 +56,6 @@ class ProviderViewModel(
             }
         }
     }
-
 
     fun getCategories() {
         viewModelScope.launch {
@@ -99,7 +103,7 @@ class ProviderViewModel(
             }
         }
     }
-    
+
     fun updateService(
         serviceId: String,
         title: RequestBody,
@@ -110,13 +114,13 @@ class ProviderViewModel(
         providerId: String
     ) {
         viewModelScope.launch {
-             _isLoading.value = true
+            _isLoading.value = true
             try {
                 repository.updateService(serviceId, title, desc, price, categoryId, photo)
                 _operationStatus.value = Result.success("Service Updated")
                 loadProviderServices(providerId)
             } catch (e: Exception) {
-                 _operationStatus.value = Result.failure(e)
+                _operationStatus.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
             }
@@ -131,6 +135,7 @@ class ProviderViewModel(
                 val result = repository.getBookingsByProvider(providerId)
                 Log.d("ProviderViewModel", "Bookings fetched successfully. Count: ${result.size}")
                 _bookings.value = result
+                updateStats()
             } catch (e: Exception) {
                 Log.e("ProviderViewModel", "Error loading bookings", e)
                 _operationStatus.value = Result.failure(e)
@@ -139,7 +144,6 @@ class ProviderViewModel(
             }
         }
     }
-
 
     fun acceptBooking(bookingId: String, providerId: String) {
         viewModelScope.launch {
@@ -165,18 +169,25 @@ class ProviderViewModel(
         }
     }
 
-
     fun loadReviews(providerId: String) {
-         viewModelScope.launch {
+        viewModelScope.launch {
             _isLoading.value = true
             try {
                 val result = repository.getReviewsByProvider(providerId)
                 _reviews.value = result
+                updateStats()
             } catch (e: Exception) {
-                 // handle error
+                // handle error
             } finally {
                 _isLoading.value = false
             }
         }
+    }
+
+    private fun updateStats() {
+        val bookingsCount = _bookings.value?.size ?: 0
+        val servicesCount = _services.value?.size ?: 0
+        val reviewsCount = _reviews.value?.size ?: 0
+        _stats.value = ProviderStats(bookingsCount, servicesCount, reviewsCount)
     }
 }

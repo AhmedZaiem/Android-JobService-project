@@ -21,7 +21,9 @@ import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.ProviderRepository
 import com.example.projet.databinding.FragmentHomeProviderBinding
 import com.example.projet.viewmodel.AuthViewModel
+import com.example.projet.viewmodel.AuthViewModelFactory
 import com.example.projet.viewmodel.ProviderViewModel
+import com.example.projet.viewmodel.ProviderViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -31,19 +33,11 @@ class HomeFragmentProvider : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProviderViewModel by viewModels {
-        object : androidx.lifecycle.ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                return ProviderViewModel(ProviderRepository()) as T
-            }
-        }
+        ProviderViewModelFactory(ProviderRepository())
     }
 
     private val authViewModel: AuthViewModel by activityViewModels {
-        object : androidx.lifecycle.ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                return AuthViewModel(AuthRepository()) as T
-            }
-        }
+        AuthViewModelFactory(AuthRepository())
     }
 
     private lateinit var servicesAdapter: ServicesAdapter
@@ -158,6 +152,8 @@ class HomeFragmentProvider : Fragment() {
             if (!providerId.isNullOrEmpty()) {
                 Log.d("HomeFragmentProvider", "UserId observed: $providerId")
                 viewModel.loadProviderServices(providerId)
+                viewModel.loadBookings(providerId)
+                viewModel.loadReviews(providerId)
             } else {
                 Log.w("HomeFragmentProvider", "Provider ID is null, clearing services.")
                 servicesAdapter.submitList(emptyList())
@@ -169,6 +165,12 @@ class HomeFragmentProvider : Fragment() {
             servicesAdapter.submitList(services)
             binding.tvEmptyServices.visibility = if (services.isEmpty()) View.VISIBLE else View.GONE
             binding.rvProviderServices.visibility = if (services.isEmpty()) View.GONE else View.VISIBLE
+        }
+
+        viewModel.stats.observe(viewLifecycleOwner) { stats ->
+            binding.txtBookingsCount.text = stats.totalBookings.toString()
+            binding.txtServicesCount.text = stats.totalServices.toString()
+            binding.txtReviewsCount.text = stats.totalReviews.toString()
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
