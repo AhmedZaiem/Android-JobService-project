@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.projet.data.model.Category
 import com.example.projet.data.model.LoginRequest
 import com.example.projet.data.model.RegisterRequest
+import com.example.projet.data.model.ResetPasswordRequest
+import com.example.projet.data.model.UpdatePasswordRequest
 import com.example.projet.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -20,6 +22,12 @@ class AuthViewModel(
     // ---------------------------
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
+
+    // ---------------------------
+    // Operation Status
+    // ---------------------------
+    private val _operationStatus = MutableLiveData<Result<String>>()
+    val operationStatus: LiveData<Result<String>> = _operationStatus
 
     // ---------------------------
     // Login state
@@ -133,6 +141,42 @@ class AuthViewModel(
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "Registration failed", e)
                 _registerResult.value = Result.failure(e)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // ==============================
+    // RESET PASSWORD
+    // ==============================
+    fun resetPassword(request: ResetPasswordRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = repository.resetPassword(request)
+                _operationStatus.value = Result.success(response.message)
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Reset password failed", e)
+                _operationStatus.value = Result.failure(e)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // ==============================
+    // UPDATE PASSWORD
+    // ==============================
+    fun updatePassword(userId: String, request: UpdatePasswordRequest) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = repository.updatePassword(userId, request)
+                _operationStatus.value = Result.success(response.message)
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Update password failed", e)
+                _operationStatus.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
             }

@@ -22,12 +22,12 @@ interface AuthApi {
     @POST("auth/register")
     suspend fun register(@Body registerRequest: RegisterRequest): MessageResponse
 
-    @POST("reset-password")
+    @POST("auth/reset-password")
     suspend fun resetPassword(
         @Body request: ResetPasswordRequest
     ): ResetPasswordResponse
 
-    @PUT("update-password/{userId}")
+    @PUT("auth/update-password/{userId}")
     suspend fun updatePassword(
         @Path("userId") userId: String,
         @Body request: UpdatePasswordRequest

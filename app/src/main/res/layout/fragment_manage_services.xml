@@ -20,25 +20,28 @@
         android:background="#F0F0F0"
         android:padding="8dp"
         android:layout_marginBottom="16dp">
-        
+
         <EditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Service Title"/>
+            android:hint="Service Title"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"/>
+            android:hint="Description"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/etPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Price"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
 
         <Spinner
             android:id="@+id/categorySpinner"

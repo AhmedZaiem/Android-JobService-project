@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/emailEditText"
@@ -24,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/passwordEditText"
@@ -32,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/cityEditText"
@@ -40,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="City"
-            android:inputType="text" />
+            android:inputType="text"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/telEditText"
@@ -48,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Telephone"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:minHeight="48dp" />
 
         <RadioGroup
             android:id="@+id/roleRadioGroup"
@@ -61,15 +66,17 @@
                 android:id="@+id/customerRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Customer"
-                android:checked="true"/>
+                tools:ignore="TouchTargetSizeCheck" />
 
             <RadioButton
                 android:id="@+id/providerRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Provider" />
+                android:text="Provider"
+                tools:ignore="TouchTargetSizeCheck" />
         </RadioGroup>
 
         <LinearLayout
@@ -93,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Skills"
-                android:inputType="text" />
+                android:inputType="text"
+                android:minHeight="48dp" />
 
             <EditText
                 android:id="@+id/bioEditText"

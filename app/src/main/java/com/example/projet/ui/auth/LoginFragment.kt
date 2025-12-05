@@ -12,19 +12,16 @@ import com.example.projet.R
 import com.example.projet.data.repository.AuthRepository
 import com.example.projet.databinding.FragmentLoginBinding
 import com.example.projet.viewmodel.AuthViewModel
+import com.example.projet.viewmodel.AuthViewModelFactory
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    // Use activityViewModels to share the ViewModel with other fragments
+    // Use the dedicated factory to get the shared ViewModel
     private val viewModel: AuthViewModel by activityViewModels {
-        object : androidx.lifecycle.ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                return AuthViewModel(AuthRepository()) as T
-            }
-        }
+        AuthViewModelFactory(AuthRepository())
     }
 
     override fun onCreateView(
@@ -51,6 +48,11 @@ class LoginFragment : Fragment() {
 
         binding.registerTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        // This navigation call is correct and will now work as expected
+        binding.forgotPasswordTextView.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
     }
 

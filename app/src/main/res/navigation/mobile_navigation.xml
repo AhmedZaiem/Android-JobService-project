@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_loginFragment_to_provider_navigation"
             app:destination="@id/provider_navigation" />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
     </fragment>
 
     <fragment
@@ -29,6 +32,26 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.projet.ui.auth.ResetPasswordFragment"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updatePasswordFragment"
+        android:name="com.example.projet.ui.auth.UpdatePasswordFragment"
+        android:label="fragment_update_password"
+        tools:layout="@layout/fragment_update_password" >
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
 
     <navigation android:id="@+id/customer_navigation" app:startDestination="@id/homeFragment">
@@ -63,6 +86,9 @@
             <action
                 android:id="@+id/action_homeFragmentProvider_to_reviewFragmentProvider"
                 app:destination="@id/reviewFragmentProvider" />
+            <action
+                android:id="@+id/action_homeFragmentProvider_to_updatePasswordFragment"
+                app:destination="@id/updatePasswordFragment" />
         </fragment>
         <fragment
             android:id="@+id/manageServicesFragment"
