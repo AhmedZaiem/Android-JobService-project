@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.projet.R
 import com.example.projet.data.model.Service
 import com.example.projet.databinding.ItemCustomerServiceBinding
 import java.text.NumberFormat
 import java.util.Locale
 
 class CustomerServicesAdapter(
-    private val onItemClick: ((Service) -> Unit)? = null
+    private val onBookClick: (Service) -> Unit
 ) : ListAdapter<Service, CustomerServicesAdapter.ServiceViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceViewHolder {
@@ -36,7 +37,7 @@ class CustomerServicesAdapter(
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemClick?.invoke(getItem(position))
+                    onBookClick(getItem(position))
                 }
             }
         }
@@ -46,23 +47,24 @@ class CustomerServicesAdapter(
             binding.textViewDescription.text = service.description
             binding.textViewProviderName.text = "Provider: ${service.providerId.name ?: "Unknown"}"
             
-            val format = NumberFormat.getCurrencyInstance(Locale.US)
+            val format = NumberFormat.getCurrencyInstance(Locale.getDefault())
             binding.textViewPrice.text = format.format(service.price)
 
-            // Load image using Coil
             binding.imageViewService.load(service.photoURL) {
                 crossfade(true)
-                error(android.R.drawable.ic_menu_report_image) // Use a default error icon or placeholder
-                placeholder(android.R.drawable.ic_menu_gallery)
+                placeholder(R.drawable.ic_launcher_background) // Replace with your placeholder
+                error(R.drawable.ic_launcher_background) // Replace with your error drawable
             }
         }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Service>() {
-        override fun areItemsTheSame(oldItem: Service, newItem: Service) =
-            oldItem.id == newItem.id
+        override fun areItemsTheSame(oldItem: Service, newItem: Service): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        override fun areContentsTheSame(oldItem: Service, newItem: Service) =
-            oldItem == newItem
+        override fun areContentsTheSame(oldItem: Service, newItem: Service): Boolean {
+            return oldItem == newItem
+        }
     }
 }

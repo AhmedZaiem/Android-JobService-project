@@ -1,4 +1,5 @@
 package com.example.projet.ui.customer
 
-class ReservationsFragment {
-}
+class BookingsAdapter(
+
+)

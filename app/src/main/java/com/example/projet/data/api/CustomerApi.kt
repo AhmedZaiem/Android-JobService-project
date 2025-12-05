@@ -16,25 +16,25 @@ interface CustomerApi {
 
 
     // ------------ BOOKINGS ------------
-    @POST("services/book/{serviceId}")
+    @POST("customer/book")
     suspend fun bookService(
         @Path("serviceId") serviceId: String,
         @Body bookingData: BookServiceRequest
     ): Booking
 
-    @GET("services/bookings/customer/{customerId}")
+    @GET("customer/bookings/{customerId}")
     suspend fun getCustomerBookings(
         @Path("customerId") customerId: String
     ): List<Booking>
 
-    @PUT("services/booking/cancel/{bookingId}")
+    @PUT("customer/cancel/{bookingId}")
     suspend fun cancelBooking(
         @Path("bookingId") bookingId: String
     ): MessageResponse
 
 
     // ------------ REVIEWS ------------
-    @POST("services/reviews/{serviceId}")
+    @POST("customer/review")
     suspend fun createReview(
         @Path("serviceId") serviceId: String,
         @Body review: ReviewRequest
