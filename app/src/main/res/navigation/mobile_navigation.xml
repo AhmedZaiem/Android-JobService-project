@@ -52,6 +52,7 @@
         <argument
             android:name="userId"
             app:argType="string" />
+        <deepLink app:uri="https://myapp/reset-password/{userId}" />
     </fragment>
 
     <navigation android:id="@+id/customer_navigation" app:startDestination="@id/homeFragment">
