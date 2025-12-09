@@ -63,11 +63,11 @@
             tools:layout="@layout/fragment_customer_home" >
             <action
                 android:id="@+id/action_homeFragment_to_customerReservationsFragment"
-                app:destination="@id/customerReservationsFragment" />
+                app:destination="@id/customerBookingsFragment" />
         </fragment>
         <fragment
-            android:id="@+id/customerReservationsFragment"
-            android:name="com.example.projet.ui.customer.ReservationsFragment"
+            android:id="@+id/customerBookingsFragment"
+            android:name="com.example.projet.ui.customer.CustomerBookingsFragment"
             android:label="fragment_customer_reservations"
             tools:layout="@layout/fragment_customer_reservations" />
     </navigation>

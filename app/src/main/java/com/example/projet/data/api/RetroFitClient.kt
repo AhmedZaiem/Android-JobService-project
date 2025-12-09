@@ -12,7 +12,7 @@ object RetrofitClient {
     // 2. OR find your PC's local IP address (e.g., ipconfig on Windows) and use that, e.g., "http://192.168.1.100:5000/api/"
     
     // Currently set to a common local IP placeholder. UPDATE THIS to your actual PC IP if not using adb reverse.
-    private const val BASE_URL = "http://192.168.1.100:5000/api/"
+    private const val BASE_URL = "http://192.168.1.110:5000/api/"
 
     private val interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
