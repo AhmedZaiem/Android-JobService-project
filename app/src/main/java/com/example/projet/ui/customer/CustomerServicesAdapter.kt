@@ -33,38 +33,31 @@ class CustomerServicesAdapter(
         private val binding: ItemCustomerServiceBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.root.setOnClickListener {
-                val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onBookClick(getItem(position))
-                }
-            }
-        }
-
         fun bind(service: Service) {
             binding.textViewTitle.text = service.title
             binding.textViewDescription.text = service.description
             binding.textViewProviderName.text = "Provider: ${service.providerId.name ?: "Unknown"}"
             
-            val format = NumberFormat.getCurrencyInstance(Locale.getDefault())
+            val format = NumberFormat.getCurrencyInstance(Locale.US)
             binding.textViewPrice.text = format.format(service.price)
 
             binding.imageViewService.load(service.photoURL) {
                 crossfade(true)
-                placeholder(R.drawable.ic_launcher_background) // Replace with your placeholder
-                error(R.drawable.ic_launcher_background) // Replace with your error drawable
+                error(android.R.drawable.ic_menu_report_image)
+                placeholder(android.R.drawable.ic_menu_gallery)
+            }
+
+            binding.btnBookService.setOnClickListener {
+                onBookClick(service)
             }
         }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Service>() {
-        override fun areItemsTheSame(oldItem: Service, newItem: Service): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: Service, newItem: Service) =
+            oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Service, newItem: Service): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Service, newItem: Service) =
+            oldItem == newItem
     }
 }

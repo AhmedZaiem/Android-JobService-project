@@ -58,11 +58,11 @@ class CustomerViewModel(
         }
     }
 
-    fun bookService(serviceId: String, request: BookServiceRequest) {
+    fun bookService(request: BookServiceRequest) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.bookService(serviceId, request)
+                repository.bookService(request)
                 _operationStatus.value = Result.success("Service booked successfully")
             } catch (e: Exception) {
                 Log.e("CustomerViewModel", "Error booking service", e)

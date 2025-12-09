@@ -18,7 +18,6 @@ interface CustomerApi {
     // ------------ BOOKINGS ------------
     @POST("customer/book")
     suspend fun bookService(
-        @Path("serviceId") serviceId: String,
         @Body bookingData: BookServiceRequest
     ): Booking
 
@@ -34,7 +33,7 @@ interface CustomerApi {
 
 
     // ------------ REVIEWS ------------
-    @POST("customer/review")
+    @POST("customer/review/{serviceId}")
     suspend fun createReview(
         @Path("serviceId") serviceId: String,
         @Body review: ReviewRequest

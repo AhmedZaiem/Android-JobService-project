@@ -12,12 +12,8 @@ class CustomerRepository {
 
     suspend fun getAllServices() = api.getAllServices()
     suspend fun getCustomerBookings(id: String) = api.getCustomerBookings(id)
-    suspend fun bookService(serviceId: String, bookingData: BookServiceRequest) = api.bookService(serviceId, bookingData)
+    suspend fun bookService(bookingData: BookServiceRequest) = api.bookService(bookingData)
     suspend fun cancelBooking(bookingId: String) = api.cancelBooking(bookingId)
     suspend fun createReview(serviceId: String, review: ReviewRequest) = api.createReview(serviceId, review)
-
-
-
-
 
 }
