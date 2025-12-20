@@ -61,7 +61,14 @@ class CustomerBookingsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        bookingsAdapter = CustomerBookingsAdapter()
+        bookingsAdapter = CustomerBookingsAdapter { booking ->
+            val userId = authViewModel.userId.value
+            if (userId != null) {
+                viewModel.cancelBooking(booking.id, userId)
+            } else {
+                Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.recyclerViewBookings.apply {
             adapter = bookingsAdapter
             layoutManager = LinearLayoutManager(context)
@@ -69,7 +76,6 @@ class CustomerBookingsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // Observe user ID to fetch bookings
         authViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (!userId.isNullOrEmpty()) {
                 viewModel.loadCustomerBookings(userId)
@@ -78,7 +84,6 @@ class CustomerBookingsFragment : Fragment() {
             }
         }
 
-        // Observe bookings list
         viewModel.bookings.observe(viewLifecycleOwner) { bookings ->
             bookingsAdapter.submitList(bookings)
 
@@ -91,7 +96,6 @@ class CustomerBookingsFragment : Fragment() {
             }
         }
 
-        // Observe loading state
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             if (isLoading) {
@@ -99,11 +103,12 @@ class CustomerBookingsFragment : Fragment() {
             }
         }
 
-        // Observe errors
         viewModel.operationStatus.observe(viewLifecycleOwner) { result ->
-            result.onFailure { error ->
+            result.onSuccess { message ->
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }.onFailure { error ->
                 Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
-                Log.e("CustomerBookings", "Error loading bookings", error)
+                Log.e("CustomerBookings", "Error with operation", error)
             }
         }
     }

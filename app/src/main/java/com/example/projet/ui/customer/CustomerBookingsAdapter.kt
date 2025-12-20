@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projet.data.model.Booking
 import com.example.projet.databinding.ItemCustomerBookingBinding
 
-class CustomerBookingsAdapter : ListAdapter<Booking, CustomerBookingsAdapter.BookingViewHolder>(BookingDiffCallback()) {
+class CustomerBookingsAdapter(
+    private val onCancelClick: (Booking) -> Unit
+) : ListAdapter<Booking, CustomerBookingsAdapter.BookingViewHolder>(BookingDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
         val binding = ItemCustomerBookingBinding.inflate(
@@ -31,6 +33,9 @@ class CustomerBookingsAdapter : ListAdapter<Booking, CustomerBookingsAdapter.Boo
             binding.textViewServiceTitle.text = booking.serviceId?.title ?: "Unknown Service"
             binding.textViewDate.text = booking.date ?: "No Date"
             binding.textViewStatus.text = booking.status ?: "Unknown Status"
+            binding.btnCancelBooking.setOnClickListener {
+                onCancelClick(booking)
+            }
         }
     }
 

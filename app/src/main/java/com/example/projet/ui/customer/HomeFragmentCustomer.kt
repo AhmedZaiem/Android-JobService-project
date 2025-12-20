@@ -5,24 +5,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projet.R
 import com.example.projet.data.model.BookServiceRequest
+import com.example.projet.data.model.Category
 import com.example.projet.data.model.Service
 import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.CustomerRepository
 import com.example.projet.databinding.FragmentCustomerHomeBinding
 import com.example.projet.viewmodel.AuthViewModel
 import com.example.projet.viewmodel.CustomerViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class HomeFragmentCustomer : Fragment() {
 
@@ -63,14 +70,45 @@ class HomeFragmentCustomer : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupSearch()
+        setupCategorySpinner()
         observeViewModel()
 
-        // Load services when view is created
-        viewModel.loadAllServices()
-
-        // Set up click listener for My Bookings button
         binding.btnMyBookings.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_customerReservationsFragment)
+        }
+    }
+
+    private fun setupSearch() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchQuery.value = newText.orEmpty()
+                return true
+            }
+        })
+    }
+
+    private fun setupCategorySpinner() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.categories.collectLatest { categories ->
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories.map { it.name })
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.categorySpinner.adapter = adapter
+            }
+        }
+
+        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                viewModel.selectedCategory.value = viewModel.categories.value[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                viewModel.selectedCategory.value = null
+            }
         }
     }
 
@@ -137,15 +175,16 @@ class HomeFragmentCustomer : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.services.observe(viewLifecycleOwner) { services ->
-            adapter.submitList(services)
-            
-            if (services.isEmpty()) {
-                binding.textViewEmpty.visibility = View.VISIBLE
-                binding.recyclerViewServices.visibility = View.GONE
-            } else {
-                binding.textViewEmpty.visibility = View.GONE
-                binding.recyclerViewServices.visibility = View.VISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.filteredServices.collectLatest { services ->
+                adapter.submitList(services)
+                if (services.isEmpty()) {
+                    binding.textViewEmpty.visibility = View.VISIBLE
+                    binding.recyclerViewServices.visibility = View.GONE
+                } else {
+                    binding.textViewEmpty.visibility = View.GONE
+                    binding.recyclerViewServices.visibility = View.VISIBLE
+                }
             }
         }
 

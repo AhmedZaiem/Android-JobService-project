@@ -26,17 +26,17 @@ interface CustomerApi {
         @Path("customerId") customerId: String
     ): List<Booking>
 
-    @PUT("customer/cancel/{bookingId}")
+    @DELETE("customer/cancel/{bookingId}")
     suspend fun cancelBooking(
         @Path("bookingId") bookingId: String
     ): MessageResponse
 
 
     // ------------ REVIEWS ------------
-    @POST("customer/review/{serviceId}")
+    @POST("customer/review")
     suspend fun createReview(
-        @Path("serviceId") serviceId: String,
-        @Body review: ReviewRequest
+        @Body review: ReviewRequest // include serviceId inside review if needed
     ): MessageResponse
+
 
 }
