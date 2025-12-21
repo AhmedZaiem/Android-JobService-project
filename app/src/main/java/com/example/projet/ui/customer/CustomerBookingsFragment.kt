@@ -1,10 +1,14 @@
 package com.example.projet.ui.customer
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RatingBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,6 +16,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projet.data.model.Booking
+import com.example.projet.data.model.ReviewRequest
 import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.CustomerRepository
 import com.example.projet.databinding.FragmentCustomerReservationsBinding
@@ -77,12 +83,57 @@ class CustomerBookingsFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
                 }
+            },
+            onReviewClick = { booking ->
+                showReviewDialog(booking)
             }
         )
         binding.recyclerViewBookings.apply {
             adapter = bookingsAdapter
             layoutManager = LinearLayoutManager(context)
         }
+    }
+
+    private fun showReviewDialog(booking: Booking) {
+        val context = requireContext()
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 40, 50, 10)
+        }
+
+        val ratingBar = RatingBar(context).apply {
+            numStars = 5
+            stepSize = 1.0f
+        }
+        val commentInput = EditText(context).apply { hint = "Comment" }
+
+        layout.addView(ratingBar)
+        layout.addView(commentInput)
+
+        AlertDialog.Builder(context)
+            .setTitle("Submit Review")
+            .setView(layout)
+            .setPositiveButton("Submit") { _, _ ->
+                val rating = ratingBar.rating.toInt()
+                val comment = commentInput.text.toString()
+                val customerId = authViewModel.userId.value
+                val reservationId = booking.id // use top-level booking ID
+
+                if (customerId != null && reservationId != null) {
+                    val review = ReviewRequest(
+                        reservationId = reservationId,
+                        customerId = customerId,
+                        rating = rating,
+                        comment = comment
+                    )
+                    viewModel.submitReview(review)
+                } else {
+                    Toast.makeText(context, "Could not submit review. Missing data.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+
     }
 
     private fun observeViewModel() {
@@ -116,6 +167,8 @@ class CustomerBookingsFragment : Fragment() {
         viewModel.operationStatus.observe(viewLifecycleOwner) { result ->
             result.onSuccess { message ->
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                // Optionally refresh the bookings list
+                 authViewModel.userId.value?.let { viewModel.loadCustomerBookings(it) }
             }.onFailure { error ->
                 Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
                 Log.e("CustomerBookings", "Error with operation", error)

@@ -11,7 +11,8 @@ import com.example.projet.databinding.ItemCustomerBookingBinding
 
 class CustomerBookingsAdapter(
     private val onCancelClick: (Booking) -> Unit,
-    private val onCompleteClick: (Booking) -> Unit
+    private val onCompleteClick: (Booking) -> Unit,
+    private val onReviewClick: (Booking) -> Unit
 ) : ListAdapter<Booking, CustomerBookingsAdapter.BookingViewHolder>(BookingDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
@@ -36,6 +37,11 @@ class CustomerBookingsAdapter(
             binding.textViewDate.text = booking.date ?: "No Date"
             binding.textViewStatus.text = booking.status ?: "Unknown Status"
 
+            // Reset visibility
+            binding.btnCompleteBooking.visibility = View.GONE
+            binding.btnCancelBooking.visibility = View.GONE
+            binding.btnReviewBooking.visibility = View.GONE
+
             when (booking.status) {
                 "accepted" -> {
                     binding.btnCompleteBooking.visibility = View.VISIBLE
@@ -44,11 +50,10 @@ class CustomerBookingsAdapter(
                     binding.btnCancelBooking.setOnClickListener { onCancelClick(booking) }
                 }
                 "completed" -> {
-                    binding.btnCompleteBooking.visibility = View.GONE
-                    binding.btnCancelBooking.visibility = View.GONE
+                    binding.btnReviewBooking.visibility = View.VISIBLE
+                    binding.btnReviewBooking.setOnClickListener { onReviewClick(booking) }
                 }
-                else -> {
-                    binding.btnCompleteBooking.visibility = View.GONE
+                else -> { // "pending", "cancelled", etc.
                     binding.btnCancelBooking.visibility = View.VISIBLE
                     binding.btnCancelBooking.setOnClickListener { onCancelClick(booking) }
                 }

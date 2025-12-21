@@ -137,8 +137,8 @@ class CustomerViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.createReview(review)
-                _operationStatus.value = Result.success("Review submitted successfully")
+                val response = repository.createReview(review)
+                _operationStatus.value = Result.success(response.message)
             } catch (e: Exception) {
                 Log.e("CustomerViewModel", "Error submitting review", e)
                 _operationStatus.value = Result.failure(e)
