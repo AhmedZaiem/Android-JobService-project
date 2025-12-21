@@ -17,4 +17,5 @@ class CustomerRepository {
     suspend fun cancelBooking(bookingId: String) = api.cancelBooking(bookingId)
     suspend fun createReview(review: ReviewRequest) = api.createReview(review)
     suspend fun getCategories() = authApi.getCategories()
+    suspend fun completeReservation(reservationId: String, customerId: String) = api.completeReservation(reservationId, mapOf("customerId" to customerId))
 }

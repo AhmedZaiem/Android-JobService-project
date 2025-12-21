@@ -61,14 +61,24 @@ class CustomerBookingsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        bookingsAdapter = CustomerBookingsAdapter { booking ->
-            val userId = authViewModel.userId.value
-            if (userId != null) {
-                viewModel.cancelBooking(booking.id, userId)
-            } else {
-                Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
+        bookingsAdapter = CustomerBookingsAdapter(
+            onCancelClick = { booking ->
+                val userId = authViewModel.userId.value
+                if (userId != null) {
+                    viewModel.cancelBooking(booking.id, userId)
+                } else {
+                    Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onCompleteClick = { booking ->
+                val userId = authViewModel.userId.value
+                if (userId != null) {
+                    viewModel.completeReservation(booking.id, userId)
+                } else {
+                    Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+        )
         binding.recyclerViewBookings.apply {
             adapter = bookingsAdapter
             layoutManager = LinearLayoutManager(context)

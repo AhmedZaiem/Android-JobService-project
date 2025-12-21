@@ -1,6 +1,7 @@
 package com.example.projet.ui.customer
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +10,8 @@ import com.example.projet.data.model.Booking
 import com.example.projet.databinding.ItemCustomerBookingBinding
 
 class CustomerBookingsAdapter(
-    private val onCancelClick: (Booking) -> Unit
+    private val onCancelClick: (Booking) -> Unit,
+    private val onCompleteClick: (Booking) -> Unit
 ) : ListAdapter<Booking, CustomerBookingsAdapter.BookingViewHolder>(BookingDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
@@ -33,8 +35,23 @@ class CustomerBookingsAdapter(
             binding.textViewServiceTitle.text = booking.serviceId?.title ?: "Unknown Service"
             binding.textViewDate.text = booking.date ?: "No Date"
             binding.textViewStatus.text = booking.status ?: "Unknown Status"
-            binding.btnCancelBooking.setOnClickListener {
-                onCancelClick(booking)
+
+            when (booking.status) {
+                "accepted" -> {
+                    binding.btnCompleteBooking.visibility = View.VISIBLE
+                    binding.btnCancelBooking.visibility = View.VISIBLE
+                    binding.btnCompleteBooking.setOnClickListener { onCompleteClick(booking) }
+                    binding.btnCancelBooking.setOnClickListener { onCancelClick(booking) }
+                }
+                "completed" -> {
+                    binding.btnCompleteBooking.visibility = View.GONE
+                    binding.btnCancelBooking.visibility = View.GONE
+                }
+                else -> {
+                    binding.btnCompleteBooking.visibility = View.GONE
+                    binding.btnCancelBooking.visibility = View.VISIBLE
+                    binding.btnCancelBooking.setOnClickListener { onCancelClick(booking) }
+                }
             }
         }
     }

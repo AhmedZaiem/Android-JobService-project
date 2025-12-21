@@ -3,6 +3,7 @@ package com.example.projet.data.api
 
 import com.example.projet.data.model.BookServiceRequest
 import com.example.projet.data.model.Booking
+import com.example.projet.data.model.CompleteReservationResponse
 import com.example.projet.data.model.MessageResponse
 import com.example.projet.data.model.ReviewRequest
 import com.example.projet.data.model.Service
@@ -37,6 +38,12 @@ interface CustomerApi {
     suspend fun createReview(
         @Body review: ReviewRequest // include serviceId inside review if needed
     ): MessageResponse
+
+    @PATCH("customer/complete/{reservationId}")
+    suspend fun completeReservation(
+        @Path("reservationId") reservationId: String,
+        @Body body: Map<String, String>
+    ): CompleteReservationResponse
 
 
 }

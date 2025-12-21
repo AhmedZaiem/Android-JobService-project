@@ -147,4 +147,20 @@ class CustomerViewModel(
             }
         }
     }
+
+    fun completeReservation(reservationId: String, customerId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                repository.completeReservation(reservationId, customerId)
+                _operationStatus.value = Result.success("Reservation completed successfully")
+                loadCustomerBookings(customerId)
+            } catch (e: Exception) {
+                Log.e("CustomerViewModel", "Error completing reservation", e)
+                _operationStatus.value = Result.failure(e)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 }

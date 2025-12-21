@@ -48,7 +48,7 @@
             android:id="@+id/textViewDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android.layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@+id/textViewDateLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewDateLabel"
@@ -74,6 +74,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewStatusLabel"
             tools:text="Confirmed" />
+
+        <Button
+            android:id="@+id/btnCompleteBooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Complete"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/btnCancelBooking"
+            app:layout_constraintTop_toBottomOf="@+id/textViewStatus"
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/btnCancelBooking"
