@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,19 +9,24 @@
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Service Title -->
         <TextView
             android:id="@+id/textViewServiceTitleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Service:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,11 +35,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewServiceTitleLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewServiceTitleLabel"
             tools:text="House Cleaning" />
 
+        <!-- Date -->
         <TextView
             android:id="@+id/textViewDateLabel"
             android:layout_width="wrap_content"
@@ -41,6 +51,7 @@
             android:layout_marginTop="8dp"
             android:text="Date:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewServiceTitle" />
 
@@ -49,11 +60,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewDateLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewDateLabel"
             tools:text="2023-12-01" />
 
+        <!-- Status -->
         <TextView
             android:id="@+id/textViewStatusLabel"
             android:layout_width="wrap_content"
@@ -61,6 +74,7 @@
             android:layout_marginTop="8dp"
             android:text="Status:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
@@ -70,11 +84,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textStyle="italic"
+            android:textColor="@android:color/holo_green_dark"
             app:layout_constraintStart_toEndOf="@+id/textViewStatusLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewStatusLabel"
             tools:text="Confirmed" />
 
+        <!-- Buttons -->
         <Button
             android:id="@+id/btnReviewBooking"
             android:layout_width="wrap_content"
@@ -82,6 +98,8 @@
             android:layout_marginTop="8dp"
             android:text="Review"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/holo_blue_light"
             app:layout_constraintEnd_toStartOf="@+id/btnCompleteBooking"
             app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
 
@@ -92,9 +110,11 @@
             android:layout_marginTop="8dp"
             android:text="Complete"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/holo_green_light"
             app:layout_constraintEnd_toStartOf="@+id/btnCancelBooking"
             app:layout_constraintTop_toBottomOf="@+id/textViewStatus"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/btnCancelBooking"
@@ -102,6 +122,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Cancel"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/holo_red_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
 

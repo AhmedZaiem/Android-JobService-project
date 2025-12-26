@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,20 +8,25 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     app:cardElevation="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardUseCompatPadding="true">
+    app:cardCornerRadius="12dp"
+    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Customer Name -->
         <TextView
             android:id="@+id/textViewCustomerNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Customer Name:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,11 +34,16 @@
             android:id="@+id/textViewCustomerName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewCustomerNameLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="customer_name_placeholder"/>
+            app:layout_constraintTop_toTopOf="@+id/textViewCustomerNameLabel"
+            tools:text="customer_name_placeholder" />
 
+        <!-- Service Title -->
         <TextView
             android:id="@+id/textViewServiceTitleLabel"
             android:layout_width="wrap_content"
@@ -40,6 +51,7 @@
             android:layout_marginTop="8dp"
             android:text="Service:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCustomerName" />
 
@@ -47,11 +59,16 @@
             android:id="@+id/textViewServiceTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewServiceTitleLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewServiceTitleLabel"
-            tools:text="Service Title Placeholder"/>
+            tools:text="Service Title Placeholder" />
 
+        <!-- Date -->
         <TextView
             android:id="@+id/textViewDateLabel"
             android:layout_width="wrap_content"
@@ -59,6 +76,7 @@
             android:layout_marginTop="8dp"
             android:text="Date:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewServiceTitle" />
 
@@ -66,11 +84,14 @@
             android:id="@+id/textViewDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewDateLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewDateLabel"
-            tools:text="2024-05-23"/>
+            tools:text="2024-05-23" />
 
+        <!-- Status -->
         <TextView
             android:id="@+id/textViewStatusLabel"
             android:layout_width="wrap_content"
@@ -78,6 +99,7 @@
             android:layout_marginTop="8dp"
             android:text="Status:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
@@ -85,12 +107,15 @@
             android:id="@+id/textViewStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:textStyle="italic"
+            android:textColor="@android:color/holo_orange_dark"
             app:layout_constraintStart_toEndOf="@+id/textViewStatusLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewStatusLabel"
-            tools:text="Pending"/>
+            tools:text="Pending" />
 
+        <!-- Buttons -->
         <Button
             android:id="@+id/acceptButton"
             style="?android:attr/borderlessButtonStyle"
@@ -98,7 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Accept"
-            android:textColor="@android:color/holo_blue_dark"
+            android:textColor="@android:color/holo_green_dark"
+            android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@+id/rejectButton"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +137,7 @@
             android:layout_height="wrap_content"
             android:text="Reject"
             android:textColor="@android:color/holo_red_dark"
+            android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/acceptButton"
             app:layout_constraintTop_toTopOf="@+id/acceptButton" />

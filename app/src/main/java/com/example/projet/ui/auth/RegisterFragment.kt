@@ -19,7 +19,7 @@ class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    
+
     private val authViewModel: AuthViewModel by viewModels {
         object : androidx.lifecycle.ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
@@ -27,8 +27,6 @@ class RegisterFragment : Fragment() {
             }
         }
     }
-
-    private var selectedCategory: Category? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +38,8 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupObservers()
         setupListeners()
-        
-        // Fetch categories when view is created
         authViewModel.getCategories()
     }
 
@@ -53,7 +48,7 @@ class RegisterFragment : Fragment() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                categories
+                categories.map { it.name } // 👈 safer
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.categorySpinner.adapter = adapter
@@ -64,37 +59,36 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(requireContext(), "Registration Successful", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
             }.onFailure {
-                Toast.makeText(requireContext(), "Registration Failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun setupListeners() {
-        // Handle visibility of provider specific fields
+
         binding.roleRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.providerRadioButton) {
-                binding.providerFieldsLayout.visibility = View.VISIBLE
-            } else {
-                binding.providerFieldsLayout.visibility = View.GONE
-            }
+            binding.providerFieldsLayout.visibility =
+                if (checkedId == R.id.providerRadioButton) View.VISIBLE else View.GONE
         }
 
         binding.registerButton.setOnClickListener {
+
             val name = binding.nameEditText.text.toString().trim()
             val email = binding.emailEditText.text.toString().trim()
             val password = binding.passwordEditText.text.toString().trim()
             val city = binding.cityEditText.text.toString().trim()
             val tel = binding.telEditText.text.toString().trim()
-            
+
             val role = if (binding.providerRadioButton.isChecked) "provider" else "customer"
-            
+
             var categoryId: String? = null
             var skills: String? = null
             var bio: String? = null
 
             if (role == "provider") {
-                val selectedCategory = binding.categorySpinner.selectedItem as? Category
-                categoryId = selectedCategory?.id
+                val position = binding.categorySpinner.selectedItemPosition
+                val category = authViewModel.categories.value?.get(position)
+                categoryId = category?.id
                 skills = binding.skillsEditText.text.toString().trim()
                 bio = binding.bioEditText.text.toString().trim()
             }
@@ -102,7 +96,7 @@ class RegisterFragment : Fragment() {
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 authViewModel.register(name, email, password, role, city, tel, categoryId, skills, bio)
             } else {
-                Toast.makeText(requireContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fill required fields", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white"
+    tools:context=".ui.provider.HomeProviderFragment">
 
+    <!-- Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp"
+        android:layout_marginTop="15dp"
         android:text="Provider Dashboard"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
 
     <!-- Statistics Cards -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginBottom="16dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:baselineAligned="false">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#E3F2FD">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,14 +49,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bookings"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#0D47A1"/>
 
                 <TextView
                     android:id="@+id/txtBookingsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="#0D47A1"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -59,7 +68,8 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#E8F5E9">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,14 +82,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Services"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#1B5E20"/>
 
                 <TextView
                     android:id="@+id/txtServicesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="#1B5E20"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -88,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#FFF3E0">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,40 +114,52 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reviews"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="#E65100"/>
 
                 <TextView
                     android:id="@+id/txtReviewsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="#E65100"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
 
+    <!-- Action Buttons -->
     <Button
         android:id="@+id/btnManageServices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Manage Services"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#3F51B5"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
 
     <Button
         android:id="@+id/btnViewBookings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="View Bookings"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#03A9F4"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
 
     <Button
         android:id="@+id/btnViewReviews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My Reviews"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FF9800"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
 
+    <!-- Section Title -->
     <TextView
         android:id="@+id/tvMyServices"
         android:layout_width="wrap_content"
@@ -142,29 +167,36 @@
         android:text="My Services"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"/>
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
+    <!-- Services RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProviderServices"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
 
+    <!-- Empty State -->
     <TextView
         android:id="@+id/tvEmptyServices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No services found."
+        android:textColor="#888888"
         android:visibility="gone"
         android:layout_gravity="center"/>
-
 </LinearLayout>

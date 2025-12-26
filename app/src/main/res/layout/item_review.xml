@@ -8,7 +8,10 @@
     android:layout_marginVertical="8dp"
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Customer Name:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,10 +33,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewCustomerNameLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="John Doe"/>
+            app:layout_constraintTop_toTopOf="@+id/textViewCustomerNameLabel"
+            tools:text="John Doe" />
 
         <TextView
             android:id="@+id/textViewServiceTitleLabel"
@@ -41,6 +48,7 @@
             android:layout_marginTop="8dp"
             android:text="Service:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCustomerName" />
 
@@ -49,10 +57,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewServiceTitleLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewServiceTitleLabel"
-            tools:text="House Cleaning"/>
+            tools:text="House Cleaning" />
 
         <TextView
             android:id="@+id/textViewRatingLabel"
@@ -61,6 +72,7 @@
             android:layout_marginTop="8dp"
             android:text="Rating:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewServiceTitle" />
 
@@ -69,10 +81,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/textViewRatingLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewRatingLabel"
-            tools:text="5/5"/>
+            tools:text="5/5" />
 
         <TextView
             android:id="@+id/textViewCommentLabel"
@@ -81,6 +94,7 @@
             android:layout_marginTop="8dp"
             android:text="Comment:"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewRating" />
 
@@ -89,10 +103,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textColor="@android:color/black"
+            android:lineSpacingExtra="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCommentLabel"
-            tools:text="Great service, very professional!"/>
+            tools:text="Great service, very professional!" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

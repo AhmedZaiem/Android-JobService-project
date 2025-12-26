@@ -6,6 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp"
+    android:background="#F5F5F5"
     tools:context=".ui.auth.LoginFragment">
 
     <TextView
@@ -14,7 +15,8 @@
         android:layout_marginBottom="32dp"
         android:text="Login"
         android:textSize="32sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="#212121" />
 
     <EditText
         android:id="@+id/emailEditText"
@@ -22,55 +24,65 @@
         android:layout_height="wrap_content"
         android:hint="Email Address"
         android:inputType="textEmailAddress"
-        android:minHeight="48dp" />
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:minHeight="48dp"
+        android:backgroundTint="#BDBDBD"
+        android:textColor="#212121"
+        android:textColorHint="#757575" />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:hint="Password"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:padding="12dp"
+        android:minHeight="48dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#BDBDBD"
+        android:textColor="#212121"
+        android:textColorHint="#757575" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Sign In" />
+        android:text="Sign In"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#1976D2"
+        android:paddingVertical="12dp"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:id="@+id/forgotPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:text="Forgot Password?"
+        android:textColor="#1976D2"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center"
-        android:minHeight="48dp"
-        android:text="Forgot Password?"
-        android:textColor="@android:color/holo_blue_dark" />
+        android:gravity="center" />
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_marginBottom="24dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:text="Don't have an account? Register"
+        android:textColor="#1976D2"
+        android:textSize="16sp"
         android:clickable="true"
         android:focusable="true"
-        android:minHeight="48dp"
-        android:text="Don't have an account? Register"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="16sp" />
+        android:minHeight="48dp" />
 
 </LinearLayout>

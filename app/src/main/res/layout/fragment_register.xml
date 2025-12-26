@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     android:padding="16dp"
     tools:context=".ui.auth.RegisterFragment">
 
@@ -11,122 +12,174 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="15dp"
+            />
+
+        <!-- Basic Info Fields -->
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
             android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            android:padding="12dp"
+            android:backgroundTint="#BDBDBD"
+            android:textColor="#212121"
+            android:textColorHint="#757575"
+            android:minHeight="48dp"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:minHeight="48dp" />
+            android:padding="12dp"
+            android:backgroundTint="#BDBDBD"
+            android:textColor="#212121"
+            android:textColorHint="#757575"
+            android:minHeight="48dp"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:minHeight="48dp" />
+            android:padding="12dp"
+            android:backgroundTint="#BDBDBD"
+            android:textColor="#212121"
+            android:textColorHint="#757575"
+            android:minHeight="48dp"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/cityEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="City"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:padding="12dp"
+            android:backgroundTint="#BDBDBD"
+            android:textColor="#212121"
+            android:textColorHint="#757575"
+            android:minHeight="48dp"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/telEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="Telephone"
             android:inputType="phone"
-            android:minHeight="48dp" />
+            android:padding="12dp"
+            android:backgroundTint="#BDBDBD"
+            android:textColor="#212121"
+            android:textColorHint="#757575"
+            android:minHeight="48dp"
+            android:layout_marginBottom="12dp"/>
 
+        <!-- Role Selection -->
         <RadioGroup
             android:id="@+id/roleRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
 
             <RadioButton
                 android:id="@+id/customerRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="Customer"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:checked="true"
+                android:textColor="#212121" />
 
             <RadioButton
                 android:id="@+id/providerRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="Provider"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:layout_marginStart="16dp"
+                android:textColor="#212121" />
         </RadioGroup>
 
+        <!-- Provider Extra Fields -->
         <LinearLayout
             android:id="@+id/providerFieldsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_marginBottom="12dp">
 
             <Spinner
                 android:id="@+id/categorySpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:minHeight="48dp"/>
+                android:minHeight="48dp"
+                android:layout_marginBottom="8dp"/>
 
             <EditText
                 android:id="@+id/skillsEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="Skills"
                 android:inputType="text"
-                android:minHeight="48dp" />
+                android:padding="12dp"
+                android:backgroundTint="#BDBDBD"
+                android:textColor="#212121"
+                android:textColorHint="#757575"
+                android:minHeight="48dp"
+                android:layout_marginBottom="8dp"/>
 
             <EditText
                 android:id="@+id/bioEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="Bio"
                 android:inputType="textMultiLine"
-                android:minLines="3" />
+                android:padding="12dp"
+                android:backgroundTint="#BDBDBD"
+                android:textColor="#212121"
+                android:textColorHint="#757575"
+                android:minLines="3"/>
         </LinearLayout>
 
+        <!-- Register Button -->
         <Button
             android:id="@+id/registerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Register" />
+            android:text="Register"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#1976D2"
+            android:paddingVertical="12dp"
+            android:layout_marginBottom="16dp"/>
 
+        <!-- Login Link -->
         <TextView
             android:id="@+id/loginTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Already have an account? Login"
+            android:textColor="#1976D2"
+            android:textSize="14sp"
+            android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Already have an account? Login" />
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 </ScrollView>
