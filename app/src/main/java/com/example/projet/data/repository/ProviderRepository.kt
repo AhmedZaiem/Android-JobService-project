@@ -2,6 +2,7 @@ package com.example.projet.data.repository
 
 import com.example.projet.data.api.ProviderApi
 import com.example.projet.data.api.RetrofitClient
+import com.example.projet.data.model.MessageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -40,4 +41,9 @@ class ProviderRepository {
     suspend fun getReviewsByProvider(providerId: String) = providerApi.getReviewsByProvider(providerId)
 
     suspend fun getCategories() = providerApi.getCategories()
+
+    suspend fun updateBookingDate(bookingId: String, body: Map<String, String>): MessageResponse {
+        return providerApi.updateBookingDate(bookingId, body)
+    }
+
 }

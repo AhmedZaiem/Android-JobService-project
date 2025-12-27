@@ -60,4 +60,12 @@ interface ProviderApi {
     // CATEGORIES
     @GET("admin/categories")
     suspend fun getCategories(): List<Category>
+
+    @PUT("provider/booking/update-date/{bookingId}")
+    suspend fun updateBookingDate(
+        @Path("bookingId") bookingId: String,
+        @Body body: Map<String, String>
+    ): MessageResponse
+
+
 }

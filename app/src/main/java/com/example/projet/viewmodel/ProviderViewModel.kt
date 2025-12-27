@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projet.data.model.Booking
 import com.example.projet.data.model.Category
+import com.example.projet.data.model.MessageResponse
 import com.example.projet.data.model.ProviderStats
 import com.example.projet.data.model.Review
 import com.example.projet.data.model.Service
@@ -37,6 +38,12 @@ class ProviderViewModel(
     private val _operationStatus = MutableLiveData<Result<String>>()
     val operationStatus: LiveData<Result<String>> = _operationStatus
 
+    private val _updateBookingDateSuccess = MutableLiveData<MessageResponse>()
+    val updateBookingDateSuccess: LiveData<MessageResponse> = _updateBookingDateSuccess
+
+    private val _updateBookingDateError = MutableLiveData<String>()
+    val updateBookingDateError: LiveData<String> = _updateBookingDateError
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -44,9 +51,7 @@ class ProviderViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                Log.d("ProviderViewModel", "Fetching services for $providerId")
                 val result = repository.getProviderServices(providerId)
-                Log.d("ProviderViewModel", "Services fetched: $result")
                 _services.value = result
                 updateStats()
             } catch (e: Exception) {
@@ -60,10 +65,9 @@ class ProviderViewModel(
     fun getCategories() {
         viewModelScope.launch {
             try {
-                val result = repository.getCategories()
-                _categories.value = result
+                _categories.value = repository.getCategories()
             } catch (e: Exception) {
-                // Handle error silently or log it
+                Log.e("ProviderViewModel", "Error loading categories", e)
             }
         }
     }
@@ -95,7 +99,7 @@ class ProviderViewModel(
             try {
                 repository.deleteService(serviceId)
                 _operationStatus.value = Result.success("Service Deleted")
-                loadProviderServices(providerId) // Reload list
+                loadProviderServices(providerId)
             } catch (e: Exception) {
                 _operationStatus.value = Result.failure(e)
             } finally {
@@ -131,13 +135,10 @@ class ProviderViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                Log.d("ProviderViewModel", "Loading bookings for provider: $providerId")
                 val result = repository.getBookingsByProvider(providerId)
-                Log.d("ProviderViewModel", "Bookings fetched successfully. Count: ${result.size}")
                 _bookings.value = result
                 updateStats()
             } catch (e: Exception) {
-                Log.e("ProviderViewModel", "Error loading bookings", e)
                 _operationStatus.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
@@ -177,9 +178,27 @@ class ProviderViewModel(
                 _reviews.value = result
                 updateStats()
             } catch (e: Exception) {
-                // handle error
+                Log.e("ProviderViewModel", "Error loading reviews", e)
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    // --- FIXED FUNCTION: Update Booking Date with providerId included ---
+    fun updateBookingDate(bookingId: String, date: String, providerId: String) {
+        viewModelScope.launch {
+            try {
+                // Send both date and providerId in body to backend
+                val body = mapOf(
+                    "newDate" to date,
+                    "providerId" to providerId
+                )
+                val response = repository.updateBookingDate(bookingId, body)
+                _updateBookingDateSuccess.value = response
+                loadBookings(providerId)
+            } catch (e: Exception) {
+                _updateBookingDateError.value = e.message
             }
         }
     }

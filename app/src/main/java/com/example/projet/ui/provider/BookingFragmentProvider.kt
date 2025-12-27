@@ -1,5 +1,6 @@
 package com.example.projet.ui.provider
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,12 +12,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projet.data.model.Booking
 import com.example.projet.data.repository.AuthRepository
 import com.example.projet.data.repository.ProviderRepository
 import com.example.projet.databinding.FragmentProviderBookingsBinding
 import com.example.projet.viewmodel.AuthViewModel
 import com.example.projet.viewmodel.ProviderViewModel
 import com.example.projet.viewmodel.ProviderViewModelFactory
+import java.util.Calendar
 
 class BookingFragmentProvider : Fragment() {
 
@@ -47,8 +50,6 @@ class BookingFragmentProvider : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("BookingFragment", "onViewCreated")
-
         setupRecyclerView()
         observeViewModel()
     }
@@ -70,6 +71,9 @@ class BookingFragmentProvider : Fragment() {
                 } else {
                     Toast.makeText(context, "Provider ID not found", Toast.LENGTH_SHORT).show()
                 }
+            },
+            onUpdateDate = { booking ->
+                showDatePickerDialog(booking)
             }
         )
 
@@ -79,41 +83,55 @@ class BookingFragmentProvider : Fragment() {
         }
     }
 
+    private fun showDatePickerDialog(booking: Booking) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val newDate = "%04d-%02d-%02d".format(selectedYear, selectedMonth + 1, selectedDay)
+            val providerId = authViewModel.userId.value
+            if (!providerId.isNullOrEmpty()) {
+                viewModel.updateBookingDate(booking.id, newDate, providerId)
+                bookingsAdapter.updateBookingDateInList(booking.id, newDate) // Update UI immediately
+            } else {
+                Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
+            }
+        }, year, month, day).show()
+    }
+
     private fun observeViewModel() {
-        // Observe provider ID
         authViewModel.userId.observe(viewLifecycleOwner) { providerId ->
-            Log.d("BookingFragment", "Auth ID observed: $providerId")
             if (!providerId.isNullOrEmpty()) {
                 viewModel.loadBookings(providerId)
             } else {
-                Log.w("BookingFragment", "User ID is null or empty")
                 Toast.makeText(context, "User not logged in", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Observe bookings list
         viewModel.bookings.observe(viewLifecycleOwner) { bookings ->
-            Log.d("BookingFragment", "Bookings list updated: size=${bookings.size}")
             bookingsAdapter.submitList(bookings)
-
             binding.recyclerView.visibility = if (bookings.isEmpty()) View.GONE else View.VISIBLE
         }
 
-        // Observe loading state
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Observe operation status (accept/reject)
+        // Observers for date update
+        viewModel.updateBookingDateSuccess.observe(viewLifecycleOwner) { response ->
+            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.updateBookingDateError.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(context, "Error updating date: $error", Toast.LENGTH_LONG).show()
+        }
+
         viewModel.operationStatus.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { message ->
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                },
-                onFailure = { error ->
-                    Log.e("BookingFragment", "Operation error", error)
-                    Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
-                }
+                onSuccess = { message -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show() },
+                onFailure = { error -> Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show() }
             )
         }
     }
