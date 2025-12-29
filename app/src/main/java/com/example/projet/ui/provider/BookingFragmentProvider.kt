@@ -2,7 +2,6 @@ package com.example.projet.ui.provider
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,23 +57,15 @@ class BookingFragmentProvider : Fragment() {
         bookingsAdapter = BookingsAdapter(
             onAccept = { booking ->
                 val providerId = authViewModel.userId.value
-                if (!providerId.isNullOrEmpty()) {
-                    viewModel.acceptBooking(booking.id, providerId)
-                } else {
-                    Toast.makeText(context, "Provider ID not found", Toast.LENGTH_SHORT).show()
-                }
+                if (!providerId.isNullOrEmpty()) viewModel.acceptBooking(booking.id, providerId)
+                else Toast.makeText(context, "Provider ID not found", Toast.LENGTH_SHORT).show()
             },
             onReject = { booking ->
                 val providerId = authViewModel.userId.value
-                if (!providerId.isNullOrEmpty()) {
-                    viewModel.rejectBooking(booking.id, providerId)
-                } else {
-                    Toast.makeText(context, "Provider ID not found", Toast.LENGTH_SHORT).show()
-                }
+                if (!providerId.isNullOrEmpty()) viewModel.rejectBooking(booking.id, providerId)
+                else Toast.makeText(context, "Provider ID not found", Toast.LENGTH_SHORT).show()
             },
-            onUpdateDate = { booking ->
-                showDatePickerDialog(booking)
-            }
+            onUpdateDate = { booking -> showDatePickerDialog(booking) }
         )
 
         binding.recyclerView.apply {
@@ -94,7 +85,7 @@ class BookingFragmentProvider : Fragment() {
             val providerId = authViewModel.userId.value
             if (!providerId.isNullOrEmpty()) {
                 viewModel.updateBookingDate(booking.id, newDate, providerId)
-                bookingsAdapter.updateBookingDateInList(booking.id, newDate) // Update UI immediately
+                bookingsAdapter.updateBookingDateInList(booking.id, newDate)
             } else {
                 Toast.makeText(requireContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show()
             }
@@ -103,11 +94,8 @@ class BookingFragmentProvider : Fragment() {
 
     private fun observeViewModel() {
         authViewModel.userId.observe(viewLifecycleOwner) { providerId ->
-            if (!providerId.isNullOrEmpty()) {
-                viewModel.loadBookings(providerId)
-            } else {
-                Toast.makeText(context, "User not logged in", Toast.LENGTH_SHORT).show()
-            }
+            if (!providerId.isNullOrEmpty()) viewModel.loadBookings(providerId)
+            else Toast.makeText(context, "User not logged in", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.bookings.observe(viewLifecycleOwner) { bookings ->
@@ -119,7 +107,6 @@ class BookingFragmentProvider : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Observers for date update
         viewModel.updateBookingDateSuccess.observe(viewLifecycleOwner) { response ->
             Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
         }

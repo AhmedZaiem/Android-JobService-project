@@ -38,8 +38,13 @@ class BookingsAdapter(
             binding.textViewDate.text = booking.date ?: "No Date"
             binding.textViewStatus.text = booking.status ?: "Unknown"
 
-            binding.buttonUpdateDate.setOnClickListener { onUpdateDate(booking) }
+            // Hide Update Date if completed or rejected
+            binding.buttonUpdateDate.visibility =
+                if (booking.status.equals("completed", ignoreCase = true) ||
+                    booking.status.equals("rejected", ignoreCase = true)
+                ) View.GONE else View.VISIBLE
 
+            // Buttons visibility
             if (booking.status.equals("pending", ignoreCase = true)) {
                 binding.acceptButton.visibility = View.VISIBLE
                 binding.rejectButton.visibility = View.VISIBLE
@@ -49,6 +54,9 @@ class BookingsAdapter(
                 binding.acceptButton.visibility = View.GONE
                 binding.rejectButton.visibility = View.GONE
             }
+
+            // Update Date click
+            binding.buttonUpdateDate.setOnClickListener { onUpdateDate(booking) }
         }
     }
 
